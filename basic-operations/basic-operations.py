@@ -25,7 +25,7 @@ with tf.Session() as sess:
 a = tf.placeholder(tf.int16)
 b = tf.placeholder(tf.int16)
 
-#define sonme operations
+# define sonme operations
 add = tf.add(a, b)
 mul=tf.multiply(a, b)
 
