@@ -55,7 +55,7 @@ def maxpool2d(x, k=2):
 
 # Create model
 def conv_net(x, weights, biases, dropout):
-    # Reshape input picture
+    # Reshape input picture，将输入的多张图片放到一个张量中
     x = tf.reshape(x, shape=[-1, 28, 28, 1])
 
     # Convolution Layer
