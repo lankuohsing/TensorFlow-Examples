@@ -58,7 +58,7 @@ def conv_net(x, weights, biases, dropout):
     # Reshape input picture，将输入的多张图片放到一个张量中
     x = tf.reshape(x, shape=[-1, 28, 28, 1])
 
-    # Convolution Layer
+    # Convolution Layer 第一层
     conv1 = conv2d(x, weights['wc1'], biases['bc1'])
     # Max Pooling (down-sampling)
     conv1 = maxpool2d(conv1, k=2)
