@@ -14,7 +14,7 @@ import tensorflow as tf
 最后会得到一张3×3的feature map
 '''
 input1 = tf.constant([[[[1.],[2.],[3.]],[[4.],[5.],[6.]],[[7.],[8.],[9.]]]])  
-filter1 = tf.constant([[[[10.]]]]) 
+filter1 = tf.constant([[[[10., 100]]]]) 
 op1 = tf.nn.conv2d(input1, filter1, strides=[1, 1, 1, 1], padding='VALID')
 
 #case 2  
