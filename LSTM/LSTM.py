@@ -19,7 +19,7 @@ from tensorflow.contrib import rnn
 
 # Import MNIST data
 from tensorflow.examples.tutorials.mnist import input_data
-mnist = input_data.read_data_sets("/tmp/data/", one_hot=True)
+mnist = input_data.read_data_sets("../../data/MNIST/", one_hot=True)
 # In[]
 import time;
 time_start=time.time();#time.time()为1970.1.1到当前时间的毫秒数
