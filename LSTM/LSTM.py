@@ -21,6 +21,9 @@ from tensorflow.contrib import rnn
 from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets("/tmp/data/", one_hot=True)
 # In[]
+import time;
+time_start=time.time();#time.time()为1970.1.1到当前时间的毫秒数
+# In[]
 # Training Parameters
 learning_rate = 0.001
 training_steps = 10000
@@ -108,3 +111,6 @@ with tf.Session() as sess:
     test_label = mnist.test.labels[:test_len]
     print("Testing Accuracy:", \
         sess.run(accuracy, feed_dict={X: test_data, Y: test_label}))
+# In[]
+time_end=time.time();#time.time()为1970.1.1到当前时间的毫秒数
+print(time_end-time_start,"s")
