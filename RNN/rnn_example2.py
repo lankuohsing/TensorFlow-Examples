@@ -97,7 +97,9 @@ x_one_hot = tf.one_hot(x, num_classes)#shape:(3,10,2)
 rnn_inputs = tf.unstack(x_one_hot, axis=1)#分解为10个(3,2)的数组，存在一个list中
 
 #定义rnn_cell的权重参数，
-with tf.variable_scope('rnn_cell',reuse=True):
+with tf.variable_scope('rnn_cell'
+                       ,reuse=None
+                       ):
     """由于tf.Variable() 每次都在创建新对象，所有reuse=True 和它并没有什么关系。
     对于get_variable()，来说，如果已经创建的变量对象，就把那个对象返回，
     如果没有创建变量对象的话，就创建一个新的。"""
@@ -109,7 +111,9 @@ def rnn_cell(rnn_input, state):
     输入：rnn_input.shape()=(3,2),state.shape()=(3,4)
     输出：新的state(3,4)
     """
-    with tf.variable_scope('rnn_cell', reuse=True):
+    with tf.variable_scope('rnn_cell'
+                           , reuse=True
+                           ):
         W = tf.get_variable('W', [num_classes + state_size, state_size])#W.shape()=(6,4)
         b = tf.get_variable('b', [state_size], initializer=tf.constant_initializer(0.0))#b.shape()=(1,4)
     #定义rnn_cell具体的操作，这里使用的是最简单的rnn，不是LSTM
@@ -124,7 +128,9 @@ for rnn_input in rnn_inputs:#rnn_inputs是一个长度为10的list
 final_state = rnn_outputs[-1]#下标为-1时，等效于取最后一个元素。（周期性，-2等效于倒数第二个元素）
 
 #定义softmax层
-with tf.variable_scope('softmax',reuse=True):
+with tf.variable_scope('softmax'
+                       ,reuse=None
+                       ):
     W = tf.get_variable('W', [state_size, num_classes])
     b = tf.get_variable('b', [num_classes], initializer=tf.constant_initializer(0.0))
 #注意，这里要将num_steps个输出全部分别进行计算其输出，然后使用softmax预测
