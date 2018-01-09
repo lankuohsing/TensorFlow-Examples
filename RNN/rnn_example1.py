@@ -42,7 +42,8 @@ def gen_data(size=1000000):
         else:
             Y.append(1)
     return X, np.array(Y)
-
+# In[]
+X,Y=gen_data(size=1000000)
 # In[]
 '''生成batch数据'''
 def gen_batch(raw_data, batch_size, num_step):
