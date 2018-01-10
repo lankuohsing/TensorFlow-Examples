@@ -10,6 +10,7 @@ This example is using the MNIST database of handwritten digits (http://yann.lecu
 Long Short Term Memory paper: http://deeplearning.cs.cmu.edu/pdfs/Hochreiter97_lstm.pdf
 Author: Aymeric Damien
 Project: https://github.com/aymericdamien/TensorFlow-Examples/
+图片的每一行当作一个序列
 '''
 
 # In[]
@@ -55,7 +56,7 @@ def RNN(x, weights, biases):
     # Required shape: 'timesteps' tensors list of shape (batch_size, n_input)
 
     # Unstack to get a list of 'timesteps' tensors of shape (batch_size, n_input)
-    x = tf.unstack(x, timesteps, 1)
+    x = tf.unstack(x, timesteps, 1)#此时x变成一个长度为timesteps的list，每个元素的shape为(batch_size,n_input)
 
     # Define a lstm cell with tensorflow
     lstm_cell = rnn.BasicLSTMCell(num_hidden, forget_bias=1.0)

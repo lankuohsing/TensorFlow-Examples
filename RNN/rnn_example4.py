@@ -25,7 +25,7 @@ import matplotlib.pyplot as plt
 # In[]
 batch_size = 3
 num_classes = 2
-state_size = 4
+state_size = 4#cell输出的状态的shape，等效于hidden layer的神经元个数
 num_steps = 10
 learning_rate = 0.2
 # In[]
@@ -112,7 +112,7 @@ rnn_inputs=x_one_hot
 #注意这里去掉了这行代码，因为我们不需要将其表示成列表的形式在使用循环去做。
 #rnn_inputs = tf.unstack(x_one_hot, axis=1)#分解为10个(3,2)的数组，存在一个list中
 # In[]
-cell = tf.contrib.rnn.BasicRNNCell(state_size)
+cell = tf.contrib.rnn.BasicRNNCell(state_size)#state_size等效于hidden layer的神经元个数
 rnn_outputs, final_state = tf.nn.dynamic_rnn(cell, rnn_inputs, initial_state=init_state)
 
 

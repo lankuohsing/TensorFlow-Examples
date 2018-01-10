@@ -4,10 +4,10 @@ Created on Wed Jan 10 11:55:10 2018
 
 @author: lankuohsing
 """
-
 from tensorflow.examples.tutorials.mnist import input_data
 import tensorflow as tf
 import numpy as np
+from tensorflow.contrib import rnn
 #在这里做数据加载，还是使用那个MNIST的数据，以one_hot的方式加载数据，记得目录可以改成之前已经下载完成的目录
 mnist = input_data.read_data_sets("../../data/MNIST/", one_hot=True)
 
@@ -56,11 +56,11 @@ def RNN(_X, _istate, _weights, _biases):
     # 输入层到隐含层，第一次是直接运算
     _X = tf.matmul(_X, _weights['hidden']) + _biases['hidden']
     # 之后使用LSTM
-    lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(n_hidden, forget_bias=1.0)
-    # 28长度的sequence，所以是需要分解位28次
-    _X = tf.split(0, n_steps, _X)  # n_steps * (batch_size, n_hidden)
+    lstm_cell = rnn.BasicLSTMCell(n_hidden, forget_bias=1.0)
+    # 28长度的sequence，所以是需要分解位28
+    _X = tf.split(_X, n_steps, 0)  # n_steps * (batch_size, n_hidden)
     # 开始跑RNN那部分
-    outputs, states = tf.nn.rnn(lstm_cell, _X, initial_state=_istate)
+    outputs, states = rnn.static_rnn(lstm_cell, _X, initial_state=_istate)
 
     # 输出层
     return tf.matmul(outputs[-1], _weights['out']) + _biases['out']
