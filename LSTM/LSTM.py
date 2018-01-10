@@ -32,7 +32,7 @@ display_step = 200
 
 # Network Parameters
 num_input = 28 # MNIST data input (img shape: 28*28)
-timesteps = 28 # timesteps
+timesteps = 28 # timesteps，输入cell中的窗口大小
 num_hidden = 128 # hidden layer num of features
 num_classes = 10 # MNIST total classes (0-9 digits)
 
