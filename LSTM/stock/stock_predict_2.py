@@ -1,10 +1,11 @@
 #coding=utf-8
-
+# In[]
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 tf.reset_default_graph()
+# In[]
 rnn_unit=10       #隐层数量
 input_size=7
 output_size=1

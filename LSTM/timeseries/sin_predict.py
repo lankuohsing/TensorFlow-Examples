@@ -15,11 +15,13 @@ from tensorflow.contrib.learn.python.learn.estimators.estimator import SKCompat
 mpl.use('Agg')
 from matplotlib import pyplot as plt
 # In[]
-f=open('dataset_1.csv')
+#读取数据
+f=open('sin.csv')
 df=pd.read_csv(f)
 data=np.array(df['max'])
 #data=data[::-1]
 # In[]
+#数据归一化
 normalize_data=(data-np.mean(data))/np.std(data)
 
 # In[]
@@ -34,7 +36,7 @@ TRAINING_EXAMPLES = 10000  # 训练数据个数
 TESTING_EXAMPLES = 1000  # 测试数据个数
 SAMPLE_GAP = 0.01  # 采样间隔
 # In[]
-# 定义生成正弦数据的函数
+# 根据输入序列，切割出输入数据和标签。利用前面的TIMESTEPS项预测后面的一项
 def generate_data(seq):
     X = []
     Y = []
@@ -46,7 +48,7 @@ def generate_data(seq):
     return np.array(X, dtype=np.float32), np.array(Y, dtype=np.float32)
 
 def LstmCell():
-    lstm_cell = rnn.BasicLSTMCell(HIDDEN_SIZE,state_is_tuple=True)
+    lstm_cell = rnn.BasicLSTMCell(num_units=HIDDEN_SIZE,forget_bias=1.0,state_is_tuple=True)
     return lstm_cell
 
 # 定义lstm模型

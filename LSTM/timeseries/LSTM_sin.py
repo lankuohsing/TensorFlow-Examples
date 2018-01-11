@@ -6,22 +6,16 @@ Created on Wed Jan 10 20:56:46 2018
 """
 
 # In[]
+# 以下程序为预测离散化之后的sin函数
 import numpy as np
 import tensorflow as tf
 from tensorflow.contrib import rnn
-import pandas as pd
+
+# 加载matplotlib工具包，使用该工具包可以对预测的sin函数曲线进行绘图
 import matplotlib as mpl
 from tensorflow.contrib.learn.python.learn.estimators.estimator import SKCompat
 mpl.use('Agg')
 from matplotlib import pyplot as plt
-# In[]
-f=open('dataset_1.csv')
-df=pd.read_csv(f)
-data=np.array(df['max'])
-#data=data[::-1]
-# In[]
-normalize_data=(data-np.mean(data))/np.std(data)
-
 # In[]
 learn = tf.contrib.learn
 HIDDEN_SIZE = 30  # Lstm中隐藏节点的个数
@@ -71,8 +65,10 @@ def lstm_model(X, y):
 # 封装之前定义的lstm
 regressor = SKCompat(learn.Estimator(model_fn=lstm_model, model_dir="Models/model_2"))
 # 生成数据
-train_X, train_y = generate_data(normalize_data[0:5000])
-test_X, test_y = generate_data(normalize_data[5000:6000])
+test_start = TRAINING_EXAMPLES * SAMPLE_GAP
+test_end = (TRAINING_EXAMPLES + TESTING_EXAMPLES) * SAMPLE_GAP
+train_X, train_y = generate_data(np.sin(np.linspace(0, test_start, TRAINING_EXAMPLES, dtype=np.float32)))
+test_X, test_y = generate_data(np.sin(np.linspace(test_start, test_end, TESTING_EXAMPLES, dtype=np.float32)))
 # 拟合数据
 regressor.fit(train_X, train_y, batch_size=BATCH_SIZE, steps=TRAINING_STEPS)
 # 计算预测值
@@ -86,9 +82,4 @@ print("Mean Square Error is:%f" % rmse[0])
 plot_test, = plt.plot(test_y, label='real_sin')
 plot_predicted, = plt.plot(predicted, label='predicted')
 plt.legend([plot_predicted, plot_test],['predicted', 'real_sin'])
-x_start=5000
-x_end=5100
-y_start=-2
-y_end=4
-#plt.axis([x_start,x_end,y_start,y_end])
 plt.show()
