@@ -51,7 +51,7 @@ TIMESTEPS = 10  # 循环神经网络的截断长度
 TRAINING_STEPS = FLAGS.training_steps  # 训练轮数
 BATCH_SIZE = 32  # batch大小
 NUM_FEATURES=7
-PREDICT_STEPS=1
+PREDICT_STEPS=0
 # In[]
 # 根据输入序列，切割出输入数据和标签。利用前面的TIMESTEPS项预测后面的一项
 def generate_train_data(seq):
