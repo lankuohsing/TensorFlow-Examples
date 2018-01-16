@@ -678,173 +678,6 @@ node {
   }
 }
 node {
-  name: "rnn/strided_slice_1/stack"
-  op: "Const"
-  attr {
-    key: "_output_shapes"
-    value {
-      list {
-        shape {
-          dim {
-            size: 1
-          }
-        }
-      }
-    }
-  }
-  attr {
-    key: "dtype"
-    value {
-      type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 1
-          }
-        }
-        int_val: 1
-      }
-    }
-  }
-}
-node {
-  name: "rnn/strided_slice_1/stack_1"
-  op: "Const"
-  attr {
-    key: "_output_shapes"
-    value {
-      list {
-        shape {
-          dim {
-            size: 1
-          }
-        }
-      }
-    }
-  }
-  attr {
-    key: "dtype"
-    value {
-      type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 1
-          }
-        }
-        int_val: 2
-      }
-    }
-  }
-}
-node {
-  name: "rnn/strided_slice_1/stack_2"
-  op: "Const"
-  attr {
-    key: "_output_shapes"
-    value {
-      list {
-        shape {
-          dim {
-            size: 1
-          }
-        }
-      }
-    }
-  }
-  attr {
-    key: "dtype"
-    value {
-      type: DT_INT32
-    }
-  }
-  attr {
-    key: "value"
-    value {
-      tensor {
-        dtype: DT_INT32
-        tensor_shape {
-          dim {
-            size: 1
-          }
-        }
-        int_val: 1
-      }
-    }
-  }
-}
-node {
-  name: "rnn/strided_slice_1"
-  op: "StridedSlice"
-  input: "rnn/Shape"
-  input: "rnn/strided_slice_1/stack"
-  input: "rnn/strided_slice_1/stack_1"
-  input: "rnn/strided_slice_1/stack_2"
-  attr {
-    key: "Index"
-    value {
-      type: DT_INT32
-    }
-  }
-  attr {
-    key: "T"
-    value {
-      type: DT_INT32
-    }
-  }
-  attr {
-    key: "_output_shapes"
-    value {
-      list {
-        shape {
-        }
-      }
-    }
-  }
-  attr {
-    key: "begin_mask"
-    value {
-      i: 0
-    }
-  }
-  attr {
-    key: "ellipsis_mask"
-    value {
-      i: 0
-    }
-  }
-  attr {
-    key: "end_mask"
-    value {
-      i: 0
-    }
-  }
-  attr {
-    key: "new_axis_mask"
-    value {
-      i: 0
-    }
-  }
-  attr {
-    key: "shrink_axis_mask"
-    value {
-      i: 1
-    }
-  }
-}
-node {
   name: "rnn/MultiRNNCellZeroState/BasicLSTMCellZeroState/ExpandDims/dim"
   op: "Const"
   attr {
@@ -1506,7 +1339,7 @@ node {
   }
 }
 node {
-  name: "rnn/strided_slice_2/stack"
+  name: "rnn/strided_slice_1/stack"
   op: "Const"
   attr {
     key: "_output_shapes"
@@ -1542,7 +1375,7 @@ node {
   }
 }
 node {
-  name: "rnn/strided_slice_2/stack_1"
+  name: "rnn/strided_slice_1/stack_1"
   op: "Const"
   attr {
     key: "_output_shapes"
@@ -1578,7 +1411,7 @@ node {
   }
 }
 node {
-  name: "rnn/strided_slice_2/stack_2"
+  name: "rnn/strided_slice_1/stack_2"
   op: "Const"
   attr {
     key: "_output_shapes"
@@ -1614,12 +1447,12 @@ node {
   }
 }
 node {
-  name: "rnn/strided_slice_2"
+  name: "rnn/strided_slice_1"
   op: "StridedSlice"
   input: "rnn/Shape_1"
-  input: "rnn/strided_slice_2/stack"
-  input: "rnn/strided_slice_2/stack_1"
-  input: "rnn/strided_slice_2/stack_2"
+  input: "rnn/strided_slice_1/stack"
+  input: "rnn/strided_slice_1/stack_1"
+  input: "rnn/strided_slice_1/stack_2"
   attr {
     key: "Index"
     value {
@@ -1673,7 +1506,36 @@ node {
   }
 }
 node {
-  name: "rnn/strided_slice_3/stack"
+  name: "rnn/Shape_2"
+  op: "Shape"
+  input: "transpose"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 3
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "out_type"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/strided_slice_2/stack"
   op: "Const"
   attr {
     key: "_output_shapes"
@@ -1709,7 +1571,7 @@ node {
   }
 }
 node {
-  name: "rnn/strided_slice_3/stack_1"
+  name: "rnn/strided_slice_2/stack_1"
   op: "Const"
   attr {
     key: "_output_shapes"
@@ -1745,7 +1607,7 @@ node {
   }
 }
 node {
-  name: "rnn/strided_slice_3/stack_2"
+  name: "rnn/strided_slice_2/stack_2"
   op: "Const"
   attr {
     key: "_output_shapes"
@@ -1781,12 +1643,12 @@ node {
   }
 }
 node {
-  name: "rnn/strided_slice_3"
+  name: "rnn/strided_slice_2"
   op: "StridedSlice"
-  input: "rnn/Shape_1"
-  input: "rnn/strided_slice_3/stack"
-  input: "rnn/strided_slice_3/stack_1"
-  input: "rnn/strided_slice_3/stack_2"
+  input: "rnn/Shape_2"
+  input: "rnn/strided_slice_2/stack"
+  input: "rnn/strided_slice_2/stack_1"
+  input: "rnn/strided_slice_2/stack_2"
   attr {
     key: "Index"
     value {
@@ -1872,7 +1734,7 @@ node {
 node {
   name: "rnn/ExpandDims"
   op: "ExpandDims"
-  input: "rnn/strided_slice_3"
+  input: "rnn/strided_slice_2"
   input: "rnn/ExpandDims/dim"
   attr {
     key: "T"
@@ -2092,7 +1954,7 @@ node {
 node {
   name: "rnn/TensorArray"
   op: "TensorArrayV3"
-  input: "rnn/strided_slice_2"
+  input: "rnn/strided_slice_1"
   attr {
     key: "_output_shapes"
     value {
@@ -2143,7 +2005,7 @@ node {
 node {
   name: "rnn/TensorArray_1"
   op: "TensorArrayV3"
-  input: "rnn/strided_slice_2"
+  input: "rnn/strided_slice_1"
   attr {
     key: "_output_shapes"
     value {
@@ -2798,7 +2660,7 @@ node {
 node {
   name: "rnn/while/Less/Enter"
   op: "Enter"
-  input: "rnn/strided_slice_2"
+  input: "rnn/strided_slice_1"
   attr {
     key: "T"
     value {
@@ -6241,33 +6103,10 @@ node {
   }
 }
 node {
-  name: "mean_squared_error/Sub"
-  op: "Sub"
+  name: "mean_squared_error/SquaredDifference"
+  op: "SquaredDifference"
   input: "Reshape_1"
   input: "Reshape_2"
-  attr {
-    key: "T"
-    value {
-      type: DT_FLOAT
-    }
-  }
-  attr {
-    key: "_output_shapes"
-    value {
-      list {
-        shape {
-          dim {
-            size: -1
-          }
-        }
-      }
-    }
-  }
-}
-node {
-  name: "mean_squared_error/Square"
-  op: "Square"
-  input: "mean_squared_error/Sub"
   attr {
     key: "T"
     value {
@@ -6383,7 +6222,7 @@ node {
 node {
   name: "mean_squared_error/assert_broadcastable/values/shape"
   op: "Shape"
-  input: "mean_squared_error/Square"
+  input: "mean_squared_error/SquaredDifference"
   attr {
     key: "T"
     value {
@@ -6477,7 +6316,7 @@ node {
 node {
   name: "mean_squared_error/Mul"
   op: "Mul"
-  input: "mean_squared_error/Square"
+  input: "mean_squared_error/SquaredDifference"
   input: "mean_squared_error/ToFloat_3/x"
   attr {
     key: "T"
@@ -6827,7 +6666,7 @@ node {
 node {
   name: "mean_squared_error/num_present/broadcast_weights/assert_broadcastable/values/shape"
   op: "Shape"
-  input: "mean_squared_error/Square"
+  input: "mean_squared_error/SquaredDifference"
   input: "^mean_squared_error/assert_broadcastable/static_scalar_check_success"
   attr {
     key: "T"
@@ -6893,7 +6732,7 @@ node {
 node {
   name: "mean_squared_error/num_present/broadcast_weights/ones_like/Shape"
   op: "Shape"
-  input: "mean_squared_error/Square"
+  input: "mean_squared_error/SquaredDifference"
   input: "^mean_squared_error/assert_broadcastable/static_scalar_check_success"
   input: "^mean_squared_error/num_present/broadcast_weights/assert_broadcastable/static_scalar_check_success"
   attr {
@@ -9058,7 +8897,7 @@ node {
 node {
   name: "OptimizeLoss/gradients/mean_squared_error/Mul_grad/Shape"
   op: "Shape"
-  input: "mean_squared_error/Square"
+  input: "mean_squared_error/SquaredDifference"
   attr {
     key: "T"
     value {
@@ -9237,7 +9076,7 @@ node {
 node {
   name: "OptimizeLoss/gradients/mean_squared_error/Mul_grad/mul_1"
   op: "Mul"
-  input: "mean_squared_error/Square"
+  input: "mean_squared_error/SquaredDifference"
   input: "OptimizeLoss/gradients/mean_squared_error/Sum_grad/Tile"
   attr {
     key: "T"
@@ -9912,7 +9751,94 @@ node {
   }
 }
 node {
-  name: "OptimizeLoss/gradients/mean_squared_error/Square_grad/mul/x"
+  name: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/Shape"
+  op: "Shape"
+  input: "Reshape_1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "out_type"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/Shape_1"
+  op: "Shape"
+  input: "Reshape_2"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "out_type"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/BroadcastGradientArgs"
+  op: "BroadcastGradientArgs"
+  input: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/Shape"
+  input: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/Shape_1"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: -1
+          }
+        }
+        shape {
+          dim {
+            size: -1
+          }
+        }
+      }
+    }
+  }
+}
+node {
+  name: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/scalar"
   op: "Const"
   input: "^OptimizeLoss/gradients/mean_squared_error/Mul_grad/tuple/control_dependency"
   attr {
@@ -9943,34 +9869,10 @@ node {
   }
 }
 node {
-  name: "OptimizeLoss/gradients/mean_squared_error/Square_grad/mul"
+  name: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/mul"
   op: "Mul"
-  input: "OptimizeLoss/gradients/mean_squared_error/Square_grad/mul/x"
-  input: "mean_squared_error/Sub"
-  attr {
-    key: "T"
-    value {
-      type: DT_FLOAT
-    }
-  }
-  attr {
-    key: "_output_shapes"
-    value {
-      list {
-        shape {
-          dim {
-            size: -1
-          }
-        }
-      }
-    }
-  }
-}
-node {
-  name: "OptimizeLoss/gradients/mean_squared_error/Square_grad/mul_1"
-  op: "Mul"
+  input: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/scalar"
   input: "OptimizeLoss/gradients/mean_squared_error/Mul_grad/tuple/control_dependency"
-  input: "OptimizeLoss/gradients/mean_squared_error/Square_grad/mul"
   attr {
     key: "T"
     value {
@@ -9991,38 +9893,11 @@ node {
   }
 }
 node {
-  name: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/Shape"
-  op: "Shape"
+  name: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/sub"
+  op: "Sub"
   input: "Reshape_1"
-  attr {
-    key: "T"
-    value {
-      type: DT_FLOAT
-    }
-  }
-  attr {
-    key: "_output_shapes"
-    value {
-      list {
-        shape {
-          dim {
-            size: 1
-          }
-        }
-      }
-    }
-  }
-  attr {
-    key: "out_type"
-    value {
-      type: DT_INT32
-    }
-  }
-}
-node {
-  name: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/Shape_1"
-  op: "Shape"
   input: "Reshape_2"
+  input: "^OptimizeLoss/gradients/mean_squared_error/Mul_grad/tuple/control_dependency"
   attr {
     key: "T"
     value {
@@ -10035,28 +9910,22 @@ node {
       list {
         shape {
           dim {
-            size: 1
+            size: -1
           }
         }
       }
     }
   }
-  attr {
-    key: "out_type"
-    value {
-      type: DT_INT32
-    }
-  }
 }
 node {
-  name: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/BroadcastGradientArgs"
-  op: "BroadcastGradientArgs"
-  input: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/Shape"
-  input: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/Shape_1"
+  name: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/mul_1"
+  op: "Mul"
+  input: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/mul"
+  input: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/sub"
   attr {
     key: "T"
     value {
-      type: DT_INT32
+      type: DT_FLOAT
     }
   }
   attr {
@@ -10068,20 +9937,15 @@ node {
             size: -1
           }
         }
-        shape {
-          dim {
-            size: -1
-          }
-        }
       }
     }
   }
 }
 node {
-  name: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/Sum"
+  name: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/Sum"
   op: "Sum"
-  input: "OptimizeLoss/gradients/mean_squared_error/Square_grad/mul_1"
-  input: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/BroadcastGradientArgs"
+  input: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/mul_1"
+  input: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/BroadcastGradientArgs"
   attr {
     key: "T"
     value {
@@ -10112,10 +9976,10 @@ node {
   }
 }
 node {
-  name: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/Reshape"
+  name: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/Reshape"
   op: "Reshape"
-  input: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/Sum"
-  input: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/Shape"
+  input: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/Sum"
+  input: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/Shape"
   attr {
     key: "T"
     value {
@@ -10142,10 +10006,10 @@ node {
   }
 }
 node {
-  name: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/Sum_1"
+  name: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/Sum_1"
   op: "Sum"
-  input: "OptimizeLoss/gradients/mean_squared_error/Square_grad/mul_1"
-  input: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/BroadcastGradientArgs:1"
+  input: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/mul_1"
+  input: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/BroadcastGradientArgs:1"
   attr {
     key: "T"
     value {
@@ -10176,41 +10040,43 @@ node {
   }
 }
 node {
-  name: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/Neg"
+  name: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/Reshape_1"
+  op: "Reshape"
+  input: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/Sum_1"
+  input: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/Shape_1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "Tshape"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: -1
+          }
+        }
+      }
+    }
+  }
+}
+node {
+  name: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/Neg"
   op: "Neg"
-  input: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/Sum_1"
+  input: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/Reshape_1"
   attr {
     key: "T"
     value {
       type: DT_FLOAT
-    }
-  }
-  attr {
-    key: "_output_shapes"
-    value {
-      list {
-        shape {
-          unknown_rank: true
-        }
-      }
-    }
-  }
-}
-node {
-  name: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/Reshape_1"
-  op: "Reshape"
-  input: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/Neg"
-  input: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/Shape_1"
-  attr {
-    key: "T"
-    value {
-      type: DT_FLOAT
-    }
-  }
-  attr {
-    key: "Tshape"
-    value {
-      type: DT_INT32
     }
   }
   attr {
@@ -10227,16 +10093,16 @@ node {
   }
 }
 node {
-  name: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/tuple/group_deps"
+  name: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/tuple/group_deps"
   op: "NoOp"
-  input: "^OptimizeLoss/gradients/mean_squared_error/Sub_grad/Reshape"
-  input: "^OptimizeLoss/gradients/mean_squared_error/Sub_grad/Reshape_1"
+  input: "^OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/Reshape"
+  input: "^OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/Neg"
 }
 node {
-  name: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/tuple/control_dependency"
+  name: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/tuple/control_dependency"
   op: "Identity"
-  input: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/Reshape"
-  input: "^OptimizeLoss/gradients/mean_squared_error/Sub_grad/tuple/group_deps"
+  input: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/Reshape"
+  input: "^OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/tuple/group_deps"
   attr {
     key: "T"
     value {
@@ -10247,7 +10113,7 @@ node {
     key: "_class"
     value {
       list {
-        s: "loc:@OptimizeLoss/gradients/mean_squared_error/Sub_grad/Reshape"
+        s: "loc:@OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/Reshape"
       }
     }
   }
@@ -10265,10 +10131,10 @@ node {
   }
 }
 node {
-  name: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/tuple/control_dependency_1"
+  name: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/tuple/control_dependency_1"
   op: "Identity"
-  input: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/Reshape_1"
-  input: "^OptimizeLoss/gradients/mean_squared_error/Sub_grad/tuple/group_deps"
+  input: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/Neg"
+  input: "^OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/tuple/group_deps"
   attr {
     key: "T"
     value {
@@ -10279,7 +10145,7 @@ node {
     key: "_class"
     value {
       list {
-        s: "loc:@OptimizeLoss/gradients/mean_squared_error/Sub_grad/Reshape_1"
+        s: "loc:@OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/Neg"
       }
     }
   }
@@ -10328,7 +10194,7 @@ node {
 node {
   name: "OptimizeLoss/gradients/Reshape_2_grad/Reshape"
   op: "Reshape"
-  input: "OptimizeLoss/gradients/mean_squared_error/Sub_grad/tuple/control_dependency_1"
+  input: "OptimizeLoss/gradients/mean_squared_error/SquaredDifference_grad/tuple/control_dependency_1"
   input: "OptimizeLoss/gradients/Reshape_2_grad/Shape"
   attr {
     key: "T"
@@ -19180,6 +19046,347 @@ node {
   }
 }
 node {
+  name: "OptimizeLoss/global_norm/L2Loss"
+  op: "L2Loss"
+  input: "OptimizeLoss/gradients/rnn/while/rnn/multi_rnn_cell/cell_0/cell_0/basic_lstm_cell/basic_lstm_cell/MatMul/Enter_grad/b_acc_3"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@OptimizeLoss/gradients/rnn/while/rnn/multi_rnn_cell/cell_0/cell_0/basic_lstm_cell/basic_lstm_cell/MatMul/Enter_grad/b_acc_3"
+      }
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+}
+node {
+  name: "OptimizeLoss/global_norm/L2Loss_1"
+  op: "L2Loss"
+  input: "OptimizeLoss/gradients/rnn/while/rnn/multi_rnn_cell/cell_0/cell_0/basic_lstm_cell/basic_lstm_cell/BiasAdd/Enter_grad/b_acc_3"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@OptimizeLoss/gradients/rnn/while/rnn/multi_rnn_cell/cell_0/cell_0/basic_lstm_cell/basic_lstm_cell/BiasAdd/Enter_grad/b_acc_3"
+      }
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+}
+node {
+  name: "OptimizeLoss/global_norm/L2Loss_2"
+  op: "L2Loss"
+  input: "OptimizeLoss/gradients/fully_connected/MatMul_grad/tuple/control_dependency_1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@OptimizeLoss/gradients/fully_connected/MatMul_grad/MatMul_1"
+      }
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+}
+node {
+  name: "OptimizeLoss/global_norm/L2Loss_3"
+  op: "L2Loss"
+  input: "OptimizeLoss/gradients/fully_connected/BiasAdd_grad/tuple/control_dependency_1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@OptimizeLoss/gradients/fully_connected/BiasAdd_grad/BiasAddGrad"
+      }
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+}
+node {
+  name: "OptimizeLoss/global_norm/stack"
+  op: "Pack"
+  input: "OptimizeLoss/global_norm/L2Loss"
+  input: "OptimizeLoss/global_norm/L2Loss_1"
+  input: "OptimizeLoss/global_norm/L2Loss_2"
+  input: "OptimizeLoss/global_norm/L2Loss_3"
+  attr {
+    key: "N"
+    value {
+      i: 4
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 4
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "axis"
+    value {
+      i: 0
+    }
+  }
+}
+node {
+  name: "OptimizeLoss/global_norm/Const"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+          dim {
+            size: 1
+          }
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "OptimizeLoss/global_norm/Sum"
+  op: "Sum"
+  input: "OptimizeLoss/global_norm/stack"
+  input: "OptimizeLoss/global_norm/Const"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "Tidx"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "keep_dims"
+    value {
+      b: false
+    }
+  }
+}
+node {
+  name: "OptimizeLoss/global_norm/Const_1"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: 2.0
+      }
+    }
+  }
+}
+node {
+  name: "OptimizeLoss/global_norm/mul"
+  op: "Mul"
+  input: "OptimizeLoss/global_norm/Sum"
+  input: "OptimizeLoss/global_norm/Const_1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+}
+node {
+  name: "OptimizeLoss/global_norm/global_norm"
+  op: "Sqrt"
+  input: "OptimizeLoss/global_norm/mul"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+}
+node {
+  name: "OptimizeLoss/global_norm/gradient_norm/tags"
+  op: "Const"
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_STRING
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_STRING
+        tensor_shape {
+        }
+        string_val: "OptimizeLoss/global_norm/gradient_norm"
+      }
+    }
+  }
+}
+node {
+  name: "OptimizeLoss/global_norm/gradient_norm"
+  op: "ScalarSummary"
+  input: "OptimizeLoss/global_norm/gradient_norm/tags"
+  input: "OptimizeLoss/global_norm/global_norm"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_output_shapes"
+    value {
+      list {
+        shape {
+        }
+      }
+    }
+  }
+}
+node {
   name: "OptimizeLoss/loss/tags"
   op: "Const"
   attr {
@@ -20544,6 +20751,7 @@ node {
   input: "report_uninitialized_variables/IsVariableInitialized_7"
   input: "report_uninitialized_variables/IsVariableInitialized_8"
   input: "report_uninitialized_variables/IsVariableInitialized_9"
+  device: "/device:CPU:0"
   attr {
     key: "N"
     value {
@@ -20579,6 +20787,7 @@ node {
   name: "report_uninitialized_variables/LogicalNot"
   op: "LogicalNot"
   input: "report_uninitialized_variables/stack"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -20595,6 +20804,7 @@ node {
 node {
   name: "report_uninitialized_variables/Const"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -20640,6 +20850,7 @@ node {
 node {
   name: "report_uninitialized_variables/boolean_mask/Shape"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -20676,6 +20887,7 @@ node {
 node {
   name: "report_uninitialized_variables/boolean_mask/strided_slice/stack"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -20712,6 +20924,7 @@ node {
 node {
   name: "report_uninitialized_variables/boolean_mask/strided_slice/stack_1"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -20748,6 +20961,7 @@ node {
 node {
   name: "report_uninitialized_variables/boolean_mask/strided_slice/stack_2"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -20788,6 +21002,7 @@ node {
   input: "report_uninitialized_variables/boolean_mask/strided_slice/stack"
   input: "report_uninitialized_variables/boolean_mask/strided_slice/stack_1"
   input: "report_uninitialized_variables/boolean_mask/strided_slice/stack_2"
+  device: "/device:CPU:0"
   attr {
     key: "Index"
     value {
@@ -20846,6 +21061,7 @@ node {
 node {
   name: "report_uninitialized_variables/boolean_mask/Prod/reduction_indices"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -20884,6 +21100,7 @@ node {
   op: "Prod"
   input: "report_uninitialized_variables/boolean_mask/strided_slice"
   input: "report_uninitialized_variables/boolean_mask/Prod/reduction_indices"
+  device: "/device:CPU:0"
   attr {
     key: "T"
     value {
@@ -20915,6 +21132,7 @@ node {
 node {
   name: "report_uninitialized_variables/boolean_mask/Shape_1"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -20951,6 +21169,7 @@ node {
 node {
   name: "report_uninitialized_variables/boolean_mask/strided_slice_1/stack"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -20987,6 +21206,7 @@ node {
 node {
   name: "report_uninitialized_variables/boolean_mask/strided_slice_1/stack_1"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -21023,6 +21243,7 @@ node {
 node {
   name: "report_uninitialized_variables/boolean_mask/strided_slice_1/stack_2"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -21063,6 +21284,7 @@ node {
   input: "report_uninitialized_variables/boolean_mask/strided_slice_1/stack"
   input: "report_uninitialized_variables/boolean_mask/strided_slice_1/stack_1"
   input: "report_uninitialized_variables/boolean_mask/strided_slice_1/stack_2"
+  device: "/device:CPU:0"
   attr {
     key: "Index"
     value {
@@ -21121,6 +21343,7 @@ node {
   name: "report_uninitialized_variables/boolean_mask/concat/values_0"
   op: "Pack"
   input: "report_uninitialized_variables/boolean_mask/Prod"
+  device: "/device:CPU:0"
   attr {
     key: "N"
     value {
@@ -21155,6 +21378,7 @@ node {
 node {
   name: "report_uninitialized_variables/boolean_mask/concat/axis"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -21188,6 +21412,7 @@ node {
   input: "report_uninitialized_variables/boolean_mask/concat/values_0"
   input: "report_uninitialized_variables/boolean_mask/strided_slice_1"
   input: "report_uninitialized_variables/boolean_mask/concat/axis"
+  device: "/device:CPU:0"
   attr {
     key: "N"
     value {
@@ -21224,6 +21449,7 @@ node {
   op: "Reshape"
   input: "report_uninitialized_variables/Const"
   input: "report_uninitialized_variables/boolean_mask/concat"
+  device: "/device:CPU:0"
   attr {
     key: "T"
     value {
@@ -21252,6 +21478,7 @@ node {
 node {
   name: "report_uninitialized_variables/boolean_mask/Reshape_1/shape"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -21290,6 +21517,7 @@ node {
   op: "Reshape"
   input: "report_uninitialized_variables/LogicalNot"
   input: "report_uninitialized_variables/boolean_mask/Reshape_1/shape"
+  device: "/device:CPU:0"
   attr {
     key: "T"
     value {
@@ -21319,6 +21547,7 @@ node {
   name: "report_uninitialized_variables/boolean_mask/Where"
   op: "Where"
   input: "report_uninitialized_variables/boolean_mask/Reshape_1"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -21339,6 +21568,7 @@ node {
   name: "report_uninitialized_variables/boolean_mask/Squeeze"
   op: "Squeeze"
   input: "report_uninitialized_variables/boolean_mask/Where"
+  device: "/device:CPU:0"
   attr {
     key: "T"
     value {
@@ -21371,6 +21601,7 @@ node {
   op: "Gather"
   input: "report_uninitialized_variables/boolean_mask/Reshape"
   input: "report_uninitialized_variables/boolean_mask/Squeeze"
+  device: "/device:CPU:0"
   attr {
     key: "Tindices"
     value {
@@ -21405,6 +21636,7 @@ node {
 node {
   name: "report_uninitialized_resources/Const"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -21795,6 +22027,7 @@ node {
   input: "report_uninitialized_variables_1/IsVariableInitialized_7"
   input: "report_uninitialized_variables_1/IsVariableInitialized_8"
   input: "report_uninitialized_variables_1/IsVariableInitialized_9"
+  device: "/device:CPU:0"
   attr {
     key: "N"
     value {
@@ -21830,6 +22063,7 @@ node {
   name: "report_uninitialized_variables_1/LogicalNot"
   op: "LogicalNot"
   input: "report_uninitialized_variables_1/stack"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -21846,6 +22080,7 @@ node {
 node {
   name: "report_uninitialized_variables_1/Const"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -21891,6 +22126,7 @@ node {
 node {
   name: "report_uninitialized_variables_1/boolean_mask/Shape"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -21927,6 +22163,7 @@ node {
 node {
   name: "report_uninitialized_variables_1/boolean_mask/strided_slice/stack"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -21963,6 +22200,7 @@ node {
 node {
   name: "report_uninitialized_variables_1/boolean_mask/strided_slice/stack_1"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -21999,6 +22237,7 @@ node {
 node {
   name: "report_uninitialized_variables_1/boolean_mask/strided_slice/stack_2"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -22039,6 +22278,7 @@ node {
   input: "report_uninitialized_variables_1/boolean_mask/strided_slice/stack"
   input: "report_uninitialized_variables_1/boolean_mask/strided_slice/stack_1"
   input: "report_uninitialized_variables_1/boolean_mask/strided_slice/stack_2"
+  device: "/device:CPU:0"
   attr {
     key: "Index"
     value {
@@ -22097,6 +22337,7 @@ node {
 node {
   name: "report_uninitialized_variables_1/boolean_mask/Prod/reduction_indices"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -22135,6 +22376,7 @@ node {
   op: "Prod"
   input: "report_uninitialized_variables_1/boolean_mask/strided_slice"
   input: "report_uninitialized_variables_1/boolean_mask/Prod/reduction_indices"
+  device: "/device:CPU:0"
   attr {
     key: "T"
     value {
@@ -22166,6 +22408,7 @@ node {
 node {
   name: "report_uninitialized_variables_1/boolean_mask/Shape_1"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -22202,6 +22445,7 @@ node {
 node {
   name: "report_uninitialized_variables_1/boolean_mask/strided_slice_1/stack"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -22238,6 +22482,7 @@ node {
 node {
   name: "report_uninitialized_variables_1/boolean_mask/strided_slice_1/stack_1"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -22274,6 +22519,7 @@ node {
 node {
   name: "report_uninitialized_variables_1/boolean_mask/strided_slice_1/stack_2"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -22314,6 +22560,7 @@ node {
   input: "report_uninitialized_variables_1/boolean_mask/strided_slice_1/stack"
   input: "report_uninitialized_variables_1/boolean_mask/strided_slice_1/stack_1"
   input: "report_uninitialized_variables_1/boolean_mask/strided_slice_1/stack_2"
+  device: "/device:CPU:0"
   attr {
     key: "Index"
     value {
@@ -22372,6 +22619,7 @@ node {
   name: "report_uninitialized_variables_1/boolean_mask/concat/values_0"
   op: "Pack"
   input: "report_uninitialized_variables_1/boolean_mask/Prod"
+  device: "/device:CPU:0"
   attr {
     key: "N"
     value {
@@ -22406,6 +22654,7 @@ node {
 node {
   name: "report_uninitialized_variables_1/boolean_mask/concat/axis"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -22439,6 +22688,7 @@ node {
   input: "report_uninitialized_variables_1/boolean_mask/concat/values_0"
   input: "report_uninitialized_variables_1/boolean_mask/strided_slice_1"
   input: "report_uninitialized_variables_1/boolean_mask/concat/axis"
+  device: "/device:CPU:0"
   attr {
     key: "N"
     value {
@@ -22475,6 +22725,7 @@ node {
   op: "Reshape"
   input: "report_uninitialized_variables_1/Const"
   input: "report_uninitialized_variables_1/boolean_mask/concat"
+  device: "/device:CPU:0"
   attr {
     key: "T"
     value {
@@ -22503,6 +22754,7 @@ node {
 node {
   name: "report_uninitialized_variables_1/boolean_mask/Reshape_1/shape"
   op: "Const"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -22541,6 +22793,7 @@ node {
   op: "Reshape"
   input: "report_uninitialized_variables_1/LogicalNot"
   input: "report_uninitialized_variables_1/boolean_mask/Reshape_1/shape"
+  device: "/device:CPU:0"
   attr {
     key: "T"
     value {
@@ -22570,6 +22823,7 @@ node {
   name: "report_uninitialized_variables_1/boolean_mask/Where"
   op: "Where"
   input: "report_uninitialized_variables_1/boolean_mask/Reshape_1"
+  device: "/device:CPU:0"
   attr {
     key: "_output_shapes"
     value {
@@ -22590,6 +22844,7 @@ node {
   name: "report_uninitialized_variables_1/boolean_mask/Squeeze"
   op: "Squeeze"
   input: "report_uninitialized_variables_1/boolean_mask/Where"
+  device: "/device:CPU:0"
   attr {
     key: "T"
     value {
@@ -22622,6 +22877,7 @@ node {
   op: "Gather"
   input: "report_uninitialized_variables_1/boolean_mask/Reshape"
   input: "report_uninitialized_variables_1/boolean_mask/Squeeze"
+  device: "/device:CPU:0"
   attr {
     key: "Tindices"
     value {
@@ -22670,11 +22926,12 @@ node {
 node {
   name: "Merge/MergeSummary"
   op: "MergeSummary"
+  input: "OptimizeLoss/global_norm/gradient_norm"
   input: "OptimizeLoss/loss"
   attr {
     key: "N"
     value {
-      i: 1
+      i: 2
     }
   }
   attr {
@@ -22742,7 +22999,7 @@ node {
         dtype: DT_STRING
         tensor_shape {
         }
-        string_val: "_temp_18e891c4b0c14ce0864fe45fb2e9f78a/part"
+        string_val: "_temp_a75003f9da8d48da8ce8dfaff6e813d6/part"
       }
     }
   }
@@ -24509,5 +24766,5 @@ node {
   input: "^save/restore_shard"
 }
 versions {
-  producer: 22
+  producer: 24
 }
