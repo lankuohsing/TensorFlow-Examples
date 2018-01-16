@@ -4,7 +4,9 @@ Created on Wed Jan 10 20:56:46 2018
 
 @author: lankuohsing
 """
-
+"""
+多维特征预测5天后的股票最高值，对输入数据不进行unstack
+"""
 # In[]
 import numpy as np
 import tensorflow as tf
@@ -75,22 +77,7 @@ def LstmCell():
 # 定义lstm模型
 def lstm_model(X, y):
     cell = rnn.MultiRNNCell([LstmCell() for _ in range(NUM_LAYERS)])
-    """
-    print("X.shape:",X.shape)
-    batch_size=tf.shape(X)[0]
-    time_step=tf.shape(X)[1]
-    print("time_step:",time_step)
-    w_in=weights['in']
-    b_in=biases['in']
-    input=tf.reshape(X,[-1,input_size])  #需要将tensor转成2维进行计算，计算后的结果作为隐藏层的输入
-    print("input.shape:",input.shape)
-    print("w_in.shape:",w_in.shape)
-    input_rnn=tf.matmul(input,w_in)+b_in
-    input_rnn=tf.reshape(input_rnn,[-1,time_step,HIDDEN_SIZE])  #将tensor转成3维，作为lstm cell的输入
-    cell=tf.nn.rnn_cell.BasicLSTMCell(HIDDEN_SIZE)
-    init_state=cell.zero_state(batch_size,dtype=tf.float32)
-    print(input_rnn.shape)
-    """
+
     #X=tf.reshape(X,[-1,TIMESTEPS*input_size])
     #X=tf.split(X,TIMESTEPS,1)
     #print(X[0].shape)
@@ -156,5 +143,7 @@ x_start=0
 x_end=100
 y_start=2000
 y_end=3000
-plt.axis([x_start,x_end,y_start,y_end])
+#plt.axis([x_start,x_end,y_start,y_end])
+plt.savefig('stock5_layers='+str(NUM_LAYERS)+'_'+'size='+str(HIDDEN_SIZE)+'_'+
+'steps='+str(TRAINING_STEPS)+'.png')
 plt.show()

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Jan 10 20:56:46 2018
-根据一维时间序列信息，预测股票；利用前TIMESTEPS个点预测下一个点
+Created on Tue Jan 16 10:30:55 2018
+
 @author: lankuohsing
 """
+
 
 # In[]
 import numpy as np
@@ -18,14 +19,13 @@ from matplotlib import pyplot as plt
 import shutil
 import os
 
-model_path="Models/model_3"
+model_path="Models/model_sin2"
 if not os.path.exists(model_path):  ###判断文件是否存在，返回布尔值
    os.makedirs(model_path)
 shutil.rmtree(model_path)
-
 # In[]
 #读取数据
-f=open('dataset_1.csv')
+f=open('sin.csv')
 df=pd.read_csv(f)
 data=np.array(df['max'])
 #data=data[::-1]
@@ -38,7 +38,7 @@ learn = tf.contrib.learn
 HIDDEN_SIZE = 20  # Lstm中隐藏节点的个数
 NUM_LAYERS = 1  # LSTM的层数
 TIMESTEPS = 10  # 循环神经网络的截断长度
-TRAINING_STEPS = 10000  # 训练轮数
+TRAINING_STEPS = 1000  # 训练轮数
 BATCH_SIZE = 32  # batch大小
 
 TRAINING_EXAMPLES = 10000  # 训练数据个数
@@ -51,7 +51,7 @@ def generate_data(seq):
     Y = []
     # 序列的第i项和后面的TIMESTEPS-1项合在一起作为输入;第i+TIMESTEPS项作为输出
     # 即用sin函数前面的TIMESTPES个点的信息，预测第i+TIMESTEPS个点的函数值
-    for i in range(len(seq) - TIMESTEPS):
+    for i in range(len(seq) - TIMESTEPS - 1):
         X.append([seq[i:i + TIMESTEPS]])
         Y.append([seq[i + TIMESTEPS]])
     return np.array(X, dtype=np.float32), np.array(Y, dtype=np.float32)
@@ -61,12 +61,17 @@ def LstmCell():
     return lstm_cell
 
 # 定义lstm模型
-def lstm_model(X, y):
+def lstm_model(X0, y):
     cell = rnn.MultiRNNCell([LstmCell() for _ in range(NUM_LAYERS)])
-    print("X.shape:",X.shape)
-    outputs, _ = tf.nn.dynamic_rnn(cell, X, dtype=tf.float32)
-    print("outputs.shape:",outputs.shape)
-    output = tf.reshape(outputs[:,TIMESTEPS-1,:], [-1, HIDDEN_SIZE])
+
+    print("X0.shape:",X0.shape)
+    X=tf.unstack(X0,axis=1)
+    print("X0.shape:",X[0].shape)
+    outputs, final_state = tf.nn.static_rnn(cell, X, dtype=tf.float32)
+
+    print("outputs.shape:",outputs[-1].shape)
+    #print("final_state.shape:",final_state[0].dtype)
+    output = tf.reshape(outputs[-1], [-1, HIDDEN_SIZE])
     # 通过无激活函数的全连接层计算线性回归，并将数据压缩成一维数组结构
     #注意，这里不用在最后加一层softmax层，因为不是分类问题
     predictions = tf.contrib.layers.fully_connected(output, 1, None)
@@ -74,26 +79,22 @@ def lstm_model(X, y):
     # 将predictions和labels调整统一的shape
     labels = tf.reshape(y, [-1])
     predictions = tf.reshape(predictions, [-1])
-
+    print("predictions.shape:",predictions.shape)
+    print("labels.shape:",labels.shape)
     loss = tf.losses.mean_squared_error(predictions, labels)
     train_op = tf.contrib.layers.optimize_loss(loss, tf.contrib.framework.get_global_step(),
                                              optimizer="Adagrad",
                                              learning_rate=0.1)
     return predictions, loss, train_op
 # In[]
-X,Y=generate_data(normalize_data)
-#X=np.transpose(X,[0,2,1])
-# In[]
 # 进行训练
 # 封装之前定义的lstm
 regressor = SKCompat(learn.Estimator(model_fn=lstm_model, model_dir=model_path))
 # 生成数据
 train_X, train_y = generate_data(normalize_data[0:5000])
-train_X=np.transpose(train_X,[0,2,1])
-#train_y=np.transpose(train_X,[0,2,1])
-test_X, test_y = generate_data(normalize_data[5000:6000])
-test_X=np.transpose(test_X,[0,2,1])
-#test_y=np.transpose(test_X,[0,2,1])
+test_X, test_y = generate_data(normalize_data[5000:10000])
+#train_X=np.transpose(train_X,[0,2,1])
+#test_X=np.transpose(test_X,[0,2,1])
 # 拟合数据
 regressor.fit(train_X, train_y, batch_size=BATCH_SIZE, steps=TRAINING_STEPS)
 # 计算预测值
@@ -108,9 +109,9 @@ print("Mean Square Error is:%f" % rmse[0])
 plot_test, = plt.plot(test_y, label='real_sin')
 plot_predicted, = plt.plot(predicted, label='predicted')
 plt.legend([plot_predicted, plot_test],['predicted', 'real_sin'])
-x_start=600
-x_end=800
-y_start=-1
-y_end=-0.2
-plt.axis([x_start,x_end,y_start,y_end])
+x_start=5000
+x_end=5100
+y_start=-2
+y_end=4
+#plt.axis([x_start,x_end,y_start,y_end])
 plt.show()
