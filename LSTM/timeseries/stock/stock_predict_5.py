@@ -18,6 +18,10 @@ from sklearn.preprocessing import MinMaxScaler
 mpl.use('Agg')
 from matplotlib import pyplot as plt
 # In[]
+tf.app.flags.DEFINE_integer('num_layers', 1,"number of hidden layers")
+tf.app.flags.DEFINE_integer('hidden_size', 20,"number of nodes in wach hidden layer")
+tf.app.flags.DEFINE_integer('training_steps', 10000, "training steps")
+# In[]
 import shutil
 import os
 
@@ -38,13 +42,15 @@ scaler = MinMaxScaler(copy=True)
 scaled_data=scaler.fit_transform(data)
 
 # In[]
+FLAGS = tf.app.flags.FLAGS
 learn = tf.contrib.learn
-HIDDEN_SIZE = 20  # Lstm中隐藏节点的个数
-NUM_LAYERS = 1  # LSTM的层数
+NUM_LAYERS = FLAGS.num_layers  # LSTM的层数
+HIDDEN_SIZE = FLAGS.hidden_size  # Lstm中隐藏节点的个数
+
 TIMESTEPS = 10  # 循环神经网络的截断长度
-TRAINING_STEPS = 10000  # 训练轮数
+TRAINING_STEPS = FLAGS.training_steps  # 训练轮数
 BATCH_SIZE = 32  # batch大小
-NUM_FEATUREs=7
+NUM_FEATURES=7
 PREDICT_STEPS=5
 # In[]
 # 根据输入序列，切割出输入数据和标签。利用前面的TIMESTEPS项预测后面的一项
@@ -54,9 +60,9 @@ def generate_train_data(seq):
     # 序列的第i项和后面的TIMESTEPS-1项合在一起作为输入;第i+TIMESTEPS项作为输出
     # 即用sin函数前面的TIMESTPES个点的信息，预测第i+TIMESTEPS个点的函数值
     for i in range(seq.shape[0]- TIMESTEPS-(PREDICT_STEPS-1)):
-        X.append(seq[i:i+TIMESTEPS,0:NUM_FEATUREs].T)
-        Y.append([seq[i+TIMESTEPS+(PREDICT_STEPS-1),NUM_FEATUREs]])
-    #X.shape:[seq.shape[0]- TIMESTEPS,NUM_FEATUREs,TIMESTEPS]
+        X.append(seq[i:i+TIMESTEPS,0:NUM_FEATURES].T)
+        Y.append([seq[i+TIMESTEPS+(PREDICT_STEPS-1),NUM_FEATURES]])
+    #X.shape:[seq.shape[0]- TIMESTEPS,NUM_FEATURES,TIMESTEPS]
     #Y.shape:[seq.shape[0]- TIMESTEPS,1,TIMESTEPS]
     return np.array(X, dtype=np.float32), np.array(Y, dtype=np.float32)
 def generate_test_data(seq):
@@ -65,9 +71,9 @@ def generate_test_data(seq):
     # 序列的第i项和后面的TIMESTEPS-1项合在一起作为输入;第i+TIMESTEPS项作为输出
     # 即用sin函数前面的TIMESTPES个点的信息，预测第i+TIMESTEPS个点的函数值
     for i in range(seq.shape[0]- TIMESTEPS-(PREDICT_STEPS-1)):
-        X.append(seq[i:i+TIMESTEPS,0:NUM_FEATUREs].T)
-        Y.append([seq[i+TIMESTEPS+(PREDICT_STEPS-1),NUM_FEATUREs]])
-    #X.shape:[seq.shape[0]- TIMESTEPS,NUM_FEATUREs,TIMESTEPS]
+        X.append(seq[i:i+TIMESTEPS,0:NUM_FEATURES].T)
+        Y.append([seq[i+TIMESTEPS+(PREDICT_STEPS-1),NUM_FEATURES]])
+    #X.shape:[seq.shape[0]- TIMESTEPS,NUM_FEATURES,TIMESTEPS]
     #Y.shape:[seq.shape[0]- TIMESTEPS,1,TIMESTEPS]
     return np.array(X, dtype=np.float32), np.array(Y, dtype=np.float32)
 def LstmCell():
@@ -144,6 +150,6 @@ x_end=100
 y_start=2000
 y_end=3000
 #plt.axis([x_start,x_end,y_start,y_end])
-plt.savefig('stock5_layers='+str(NUM_LAYERS)+'_'+'size='+str(HIDDEN_SIZE)+'_'+
+plt.savefig('figures/'+'stock5_layers='+str(NUM_LAYERS)+'_'+'size='+str(HIDDEN_SIZE)+'_'+
 'steps='+str(TRAINING_STEPS)+'.png')
 plt.show()
