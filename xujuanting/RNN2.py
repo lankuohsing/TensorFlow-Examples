@@ -4,43 +4,47 @@ Created on Wed Jan 10 19:10:25 2018
 
 @author: janti
 """
+# In[]
 import numpy as np
 import tensorflow as tf
 from matplotlib import pyplot as plt
 import xlrd
-from tensorflow.contrib import rnn 
+from tensorflow.contrib import rnn
 
 learn=tf.contrib.learn
 hidden_size=30
 num_layers=1 #number of LSTM layers
 Times_Steps=10
-Training_Steps=50000
+Training_Steps=10000
 Trainging_examples=1000
 Test_examples=369
 BATCH_SIZE=100
+# In[]
 
-
-def generate_data(seq): 
+def generate_data(seq):
     X=[]
     y=[]
-    for i in range(len(seq)-Times_Steps-1):
+    for i in range(len(seq)-Times_Steps):
         X.append([seq[i:i+Times_Steps]])
         y.append([seq[i+Times_Steps]])
-    return np.array(X,dtype=np.float32), np.array(y,dtype=np.float32)               
+    return np.array(X,dtype=np.float32), np.array(y,dtype=np.float32)
 
 def lstm_model(X,y):
     #使用多层的lstm结构
     lstm_cell=tf.nn.rnn_cell.BasicLSTMCell(hidden_size)
     cell=tf.nn.rnn_cell.MultiRNNCell([lstm_cell]*num_layers)
-    x_=tf.unstack(X,axis=1)
-    output, _=rnn.static_rnn(cell, x_, dtype=tf.float32) 
-    output=output[-1]
+    print("X.shape:",X.shape)
+    #x_=tf.unstack(X,axis=1)
+    #print("x_.shape:",x_[0].shape)
+    outputs, _=tf.nn.dynamic_rnn(cell, X, dtype=tf.float32)
+    #output=output[-1]
+    output = tf.reshape(outputs[:,Times_Steps-1,:], [-1, hidden_size])
     prediction,loss=learn.models.linear_regression(output,y)
     train_op=tf.contrib.layers.optimize_loss(
             loss,tf.contrib.framework.get_global_step(),
             optimizer="Adagrad",learning_rate=0.1)
     return prediction, loss, train_op
-
+# In[]
 #导入数据
 Data_x_File="UDDS_speed.xlsx"
 book= xlrd.open_workbook (Data_x_File, encoding_override = "utf-8")
@@ -49,7 +53,10 @@ data= np.asarray([data_sheet.col_values(0)])
 data=data.T
 M=len(data)
 train_X,train_y=generate_data(data[0:Trainging_examples,0])
+train_X=np.transpose(train_X,[0,2,1])
 test_X,test_y=generate_data(data[Trainging_examples:M,0])
+test_X=np.transpose(test_X,[0,2,1])
+# In[]
 #建立深层循环网络模型
 regressor= learn.Estimator(model_fn=lstm_model)
 
@@ -63,11 +70,11 @@ predicted=[[pred] for pred in regressor.predict(test_X)]
 rmse=np.sqrt(((predicted-test_y)**2).mean(axis=0))
 print("Mean Square Error is:%f"%rmse[0])
 
-
+# In[]
 
 #绘图输出
-T1=range(1,990)
-T2=range(991,1349)
+T1=range(0,990)
+T2=range(990,1349)
 fig=plt.figure()
 plt.plot(T1,predicted_train,'r',T2,predicted,'r')
 plt.plot(T1,train_y,'g',T2,test_y,'b')
@@ -76,9 +83,10 @@ plt.xlabel("Time [s]",fontsize=35)
 plt.ylabel("Velocity [Km/h]",fontsize=35)
 plt.xticks(fontsize=25)
 plt.yticks(fontsize=25)
-fig.set_size_inches(20, 7.5)
+#fig.set_size_inches(20, 7.5)
+plt.savefig('UDDS_hidden_50.png')
 plt.show()
-fig.savefig('UDDS_hidden_50.png')
+
 
 
 
