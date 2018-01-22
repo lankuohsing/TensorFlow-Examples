@@ -95,7 +95,12 @@ def lstm_model(X, y):
 def train_func(train_X,train_y,model_path="Models/model_sin3"):
     if not os.path.exists(model_path):  ###判断文件是否存在，返回布尔值
         os.makedirs(model_path)
-    shutil.rmtree(model_path)
+    file_list=[]
+    for root, dirs, files in os.walk(model_path, topdown=True, onerror=None, followlinks=False):
+        file_list.append(files)
+    # In[]
+    for i in range(0,len(file_list[0])):
+        os.remove(model_path+'/'+file_list[0][i])
     # 进行训练
     # 封装之前定义的lstm
     regressor = SKCompat(learn.Estimator(model_fn=lstm_model, model_dir=model_path))
