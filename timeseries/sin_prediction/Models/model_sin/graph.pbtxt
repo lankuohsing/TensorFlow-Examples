@@ -206,6 +206,12 @@ node {
           dim {
             size: -1
           }
+          dim {
+            size: 5
+          }
+          dim {
+            size: 1
+          }
         }
       }
     }
@@ -222,6 +228,12 @@ node {
       shape {
         dim {
           size: -1
+        }
+        dim {
+          size: 5
+        }
+        dim {
+          size: 1
         }
       }
     }
@@ -5426,7 +5438,7 @@ node {
             size: 3
           }
         }
-        tensor_content: "\000\000\000\000\t\000\000\000\000\000\000\000"
+        tensor_content: "\000\000\000\000\005\000\000\000\000\000\000\000"
       }
     }
   }
@@ -5533,6 +5545,9 @@ node {
             size: -1
           }
           dim {
+            size: 5
+          }
+          dim {
             size: 20
           }
         }
@@ -5566,7 +5581,7 @@ node {
   attr {
     key: "shrink_axis_mask"
     value {
-      i: 2
+      i: 0
     }
   }
 }
@@ -10866,7 +10881,7 @@ node {
       list {
         shape {
           dim {
-            size: 2
+            size: 3
           }
         }
       }
@@ -10903,6 +10918,9 @@ node {
         shape {
           dim {
             size: -1
+          }
+          dim {
+            size: 5
           }
           dim {
             size: 20
@@ -11006,7 +11024,7 @@ node {
   attr {
     key: "shrink_axis_mask"
     value {
-      i: 2
+      i: 0
     }
   }
 }
@@ -23173,7 +23191,7 @@ node {
         dtype: DT_STRING
         tensor_shape {
         }
-        string_val: "_temp_95ef89d656ef4db9a07658180eceb301/part"
+        string_val: "_temp_b7af381c72b6400a91df96204e79039b/part"
       }
     }
   }
