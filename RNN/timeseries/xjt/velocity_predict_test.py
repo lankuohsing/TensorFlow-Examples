@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Created on Sun Jan 28 15:41:31 2018
-利用前面的TIMESTEPS个数据预测接下来的PREDICT_STEPS个数据
+速度预测
+利用前面的TIMESTEPS个数据预测接下来的PREDICT_STEPS个数据(仅测试)
 @author: lankuohsing
 """
 
@@ -19,7 +20,7 @@ from matplotlib import pyplot as plt
 import shutil
 import os
 #模型存储路径
-MODEL_PATH="Models/model_sin_5_pred_5"
+MODEL_PATH="Models/model_velocity"
 """
 if not os.path.exists(MODEL_PATH):  ###判断文件是否存在，返回布尔值
    os.makedirs(MODEL_PATH)
@@ -27,10 +28,13 @@ shutil.rmtree(MODEL_PATH)
 """
 # In[]
 #读取数据
-f=open('sin.csv')
-df=pd.read_csv(f)
-data=np.array(df['value'])
+data_DataFrame=pd.read_excel("EUDC_velocity_2.xlsx",sheetname=0,header=None)
+data=data_DataFrame.as_matrix()
 #data=data[::-1]
+# In[]
+data_length=data.shape[0]
+train_length=int(data_length*0.7)
+test_length=data_length-train_length
 # In[]
 #数据归一化
 #normalize_data=(data-np.mean(data))/np.std(data)
@@ -94,15 +98,15 @@ def lstm_model(X, y):
 regressor = SKCompat(learn.Estimator(model_fn=lstm_model, model_dir=MODEL_PATH))
 #regressor = learn.Estimator(model_fn=lstm_model, model_dir=MODEL_PATH)
 # 生成数据
-train_X, train_y = generate_data(normalize_data[0:5000])
-test_X, test_y = generate_data(normalize_data[5000:10000])
+train_X, train_y = generate_data(normalize_data[0:train_length])
+test_X, test_y = generate_data(normalize_data[train_length:data_length])
 train_X=np.transpose(train_X,[0,2,1])
 train_y=np.transpose(train_y,[0,2,1])
 test_X=np.transpose(test_X,[0,2,1])
 test_y=np.transpose(test_y,[0,2,1])
 # 拟合数据
 # In[]
-regressor.fit(train_X, train_y, batch_size=BATCH_SIZE, steps=TRAINING_STEPS)
+#regressor.fit(train_X, train_y, batch_size=BATCH_SIZE, steps=TRAINING_STEPS)
 # 计算预测值
 # In[]
 #predicted = [[pred] for pred in regressor.predict(test_X)]
@@ -110,9 +114,9 @@ regressor.score(test_X,test_y)
 predicted_list = list(regressor.predict(test_X))
 # In[]
 def final_data_for_plot(predicted_list,test_y):
-    # In[]
+
     test_y_list=test_y.reshape(test_y.shape[0]*test_y.shape[1],1).tolist()
-    # In[]
+
     final_predicted_list=[]
     final_test_y_list=[]
     for i in range(0,len(predicted_list)-PREDICT_STEPS+1):
@@ -146,7 +150,7 @@ x_start=1000
 x_end=1060
 y_start=-1
 y_end=-0.2
-plt.axis([x_start,x_end,y_start,y_end])
+#plt.axis([x_start,x_end,y_start,y_end])
 plt.savefig('figures/test_'+'TIMESTEPS='+str(TIMESTEPS)+'PREDICT_STEPS='+str(PREDICT_STEPS)+'.png')
 plt.show()
 # In[]
@@ -172,6 +176,6 @@ x_start=1000
 x_end=1060
 y_start=-1
 y_end=-0.2
-plt.axis([x_start,x_end,y_start,y_end])
+#plt.axis([x_start,x_end,y_start,y_end])
 plt.savefig('figures/train_'+'TIMESTEPS='+str(TIMESTEPS)+'PREDICT_STEPS='+str(PREDICT_STEPS)+'.png')
 plt.show()
