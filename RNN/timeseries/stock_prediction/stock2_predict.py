@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Sun Jan 28 15:41:31 2018
-速度预测
+股票预测
 利用前面的TIMESTEPS个数据预测接下来的PREDICT_STEPS个数据
 @author: lankuohsing
 """
@@ -20,7 +20,7 @@ from matplotlib import pyplot as plt
 import shutil
 import os
 #模型存储路径
-MODEL_PATH="Models/model_velocity"
+MODEL_PATH="Models/model_stock2"
 """
 if not os.path.exists(MODEL_PATH):  ###判断文件是否存在，返回布尔值
    os.makedirs(MODEL_PATH)
@@ -28,8 +28,9 @@ shutil.rmtree(MODEL_PATH)
 """
 # In[]
 #读取数据
-data_DataFrame=pd.read_excel("EUDC_velocity_2.xlsx",sheetname=0,header=None)
-data=data_DataFrame.as_matrix()
+f=open('stock_2.csv')
+df=pd.read_csv(f)
+data=df.iloc[:,2:10].values
 #data=data[::-1]
 # In[]
 data_length=data.shape[0]
@@ -40,19 +41,19 @@ test_length=data_length-train_length
 #normalize_data=(data-np.mean(data))/np.std(data)
 feature_range=(0,1)
 scaler = MinMaxScaler(copy=True,feature_range=feature_range)#copy=True保留原始数据矩阵
-normalize_data=scaler.fit_transform(data.reshape((data.shape[0],1))).flatten()
-#normalize_data=data.flatten()
+normalize_data=scaler.fit_transform(data)
 # In[]
 """
 Hyperparameters
 """
 learn = tf.contrib.learn
 HIDDEN_SIZE = 30  # Lstm中隐藏节点的个数
-NUM_LAYERS = 1  # LSTM的层数
-TIMESTEPS = 8  # 循环神经网络的截断长度，也即input sequence的长度
-TRAINING_STEPS = 10000  # 训练轮数
-BATCH_SIZE = 500  # batch大小
-PREDICT_STEPS=8 #每一轮的预测点个数，也即output sequence长度
+NUM_LAYERS = 2  # LSTM的层数
+TIMESTEPS = 10  # 循环神经网络的截断长度，也即input sequence的长度
+TRAINING_STEPS = 5000  # 训练轮数
+BATCH_SIZE = 200  # batch大小
+PREDICT_STEPS=5 #每一轮的预测点个数，也即output sequence长度
+NUM_FEATURES=7#输入特征维数
 # In[]
 # 根据输入序列，切割出输入数据和标签。利用前面的TIMESTEPS项预测后面的PREDICT_STEPS项
 def generate_data(seq):
@@ -62,8 +63,8 @@ def generate_data(seq):
     # 第i+TIMESTEPS项和后面的PREDICT_STEPS-1项作为输出
     # 即用sin函数前面的TIMESTPES个点的信息，预测后面的PREDICT_STEPS个点的值
     for i in range(len(seq) - TIMESTEPS -(PREDICT_STEPS-1)):
-        X.append([seq[i:i + TIMESTEPS]])
-        Y.append([seq[i + TIMESTEPS:i + TIMESTEPS+PREDICT_STEPS]])
+        X.append(seq[i:i + TIMESTEPS,0:NUM_FEATURES])
+        Y.append([seq[i + TIMESTEPS:i + TIMESTEPS+PREDICT_STEPS,3]])
     return np.array(X, dtype=np.float32), np.array(Y, dtype=np.float32)
 
 def LstmCell():
@@ -99,17 +100,16 @@ def lstm_model(X, y):
 regressor = SKCompat(learn.Estimator(model_fn=lstm_model, model_dir=MODEL_PATH))
 #regressor = learn.Estimator(model_fn=lstm_model, model_dir=MODEL_PATH)
 # 生成数据
-train_X, train_y = generate_data(normalize_data[0:train_length])
-test_X, test_y = generate_data(normalize_data[train_length:data_length])
+train_X, train_y = generate_data(normalize_data[0:train_length,:])
+test_X, test_y = generate_data(normalize_data[train_length:data_length,:])
 # In[]
-train_X=np.transpose(train_X,[0,2,1])
+#train_X=np.transpose(train_X,[0,2,1])
 train_y=np.transpose(train_y,[0,2,1])
-test_X=np.transpose(test_X,[0,2,1])
+#test_X=np.transpose(test_X,[0,2,1])
 test_y=np.transpose(test_y,[0,2,1])
 # 拟合数据
 # In[]
 regressor.fit(train_X, train_y, batch_size=BATCH_SIZE, steps=TRAINING_STEPS)
-# 计算预测值
 # In[]
 def final_data_for_plot(predicted_list,test_y):
 
@@ -124,6 +124,7 @@ def final_data_for_plot(predicted_list,test_y):
     final_predicted=np.array(final_predicted_list).reshape(len(final_predicted_list),1)
     final_test_y=np.array(final_test_y_list).reshape(len(final_test_y_list),1)
     return final_predicted, final_test_y
+# 计算预测值
 # In[]
 #predicted = [[pred] for pred in regressor.predict(test_X)]
 regressor.score(test_X,test_y)
@@ -133,12 +134,10 @@ predicted_list = list(regressor.predict(test_X))
 # In[]
 final_predicted, final_test_y=final_data_for_plot(predicted_list,test_y)
 # In[]
-
 final_predicted=(final_predicted-feature_range[0])/(feature_range[1]-feature_range[0])\
 *(scaler.data_max_[0]-scaler.data_min_[0])+scaler.data_min_[0]
 final_test_y=(final_test_y-feature_range[0])/(feature_range[1]-feature_range[0])\
 *(scaler.data_max_[0]-scaler.data_min_[0])+scaler.data_min_[0]
-
 # In[]
 # 计算MSE
 rmse = np.sqrt(((final_predicted - final_test_y) ** 2).mean(axis=0))
@@ -152,22 +151,20 @@ plot_test, = plt.plot(final_test_y, label='real_sin')
 plot_predicted, = plt.plot(final_predicted, label='predicted')
 plt.legend([plot_predicted, plot_test],['predicted', 'real_sin'])
 x_start=1000
-x_end=1100
-y_start=1500
-y_end=3000
+x_end=1060
+y_start=-1
+y_end=-0.2
 #plt.axis([x_start,x_end,y_start,y_end])
-plt.savefig('figures/stock2_test_'+'TIMESTEPS='+str(TIMESTEPS)+'PREDICT_STEPS='+str(PREDICT_STEPS)+'.png')
+plt.savefig('figures/test_'+'TIMESTEPS='+str(TIMESTEPS)+'PREDICT_STEPS='+str(PREDICT_STEPS)+'.png')
 plt.show()
 # In[]
 predicted_list = list(regressor.predict(train_X))
 final_predicted, final_test_y=final_data_for_plot(predicted_list,train_y)
 # In[]
-
 final_predicted=(final_predicted-feature_range[0])/(feature_range[1]-feature_range[0])\
 *(scaler.data_max_[0]-scaler.data_min_[0])+scaler.data_min_[0]
 final_test_y=(final_test_y-feature_range[0])/(feature_range[1]-feature_range[0])\
 *(scaler.data_max_[0]-scaler.data_min_[0])+scaler.data_min_[0]
-
 # In[]
 # 计算MSE
 rmse = np.sqrt(((final_predicted - final_test_y) ** 2).mean(axis=0))
@@ -180,9 +177,9 @@ plot_test, = plt.plot(final_test_y, label='real_sin')
 plot_predicted, = plt.plot(final_predicted, label='predicted')
 plt.legend([plot_predicted, plot_test],['predicted', 'real_sin'])
 x_start=1000
-x_end=1100
-y_start=500
+x_end=2000
+y_start=100
 y_end=1500
-#plt.axis([x_start,x_end,y_start,y_end])
-plt.savefig('figures/stock2_train_'+'TIMESTEPS='+str(TIMESTEPS)+'PREDICT_STEPS='+str(PREDICT_STEPS)+'.png')
+plt.axis([x_start,x_end,y_start,y_end])
+plt.savefig('figures/train_'+'TIMESTEPS='+str(TIMESTEPS)+'PREDICT_STEPS='+str(PREDICT_STEPS)+'.png')
 plt.show()
