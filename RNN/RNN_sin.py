@@ -6,11 +6,12 @@ Created on Mon Oct 12 22:52:53 2020
 """
 # In[]
 import numpy as np
-import tensorflow as tf
+import tensorflow as tf#本代码采用的tf1.15版本
 import matplotlib.pyplot as plt
+tf.reset_default_graph()#清除默认graph堆栈并重置全局默认graph
 # In[]
 # 1. 定义RNN的参数。
-HIDDEN_SIZE = 30                            # LSTM中隐藏节点的个数。
+HIDDEN_SIZE = 10                            # LSTM中隐藏节点的个数。
 NUM_LAYERS = 2                              # LSTM的层数。
 TIMESTEPS = 10                              # 循环神经网络的训练序列长度。
 TRAINING_STEPS = 10000                      # 训练轮数。
@@ -102,7 +103,7 @@ def plot_figure(predictions,labels,figure_name):
     plt.plot(labels, label='real_sin')
     plt.legend()
     plt.title(figure_name)
-    plt.savefig(figure_name+".png")
+    plt.savefig("figures/"+figure_name+".png")
     plt.show()
 # In[]
 # 5. 执行训练和测试。
@@ -110,26 +111,31 @@ def plot_figure(predictions,labels,figure_name):
 ds = tf.data.Dataset.from_tensor_slices((train_X, train_y))#返回的是DataSet对象
 #repeat(count)表示构建count个epoch
 ds = ds.shuffle(1000).batch(BATCH_SIZE).repeat()#取出1000个样本并打乱；每次取出数量为BATCH_SIZE的样本作为一个batch;不重复；
-X, y = ds.make_one_shot_iterator().get_next()
+X, y = ds.make_one_shot_iterator().get_next()#在DataSet中元素的形式可以是向量、元素或者字典等形式
 # In[]
-# 定义模型，得到预测结果、损失函数，和训练操作。
-with tf.variable_scope("model"):
-    _, loss, train_op = lstm_model(X, y, True)
+def main():
+    # 定义模型，得到预测结果、损失函数，和训练操作。
+    with tf.variable_scope("model"):
+        _, loss, train_op = lstm_model(X, y, True)
 
-with tf.Session() as sess:
-    sess.run(tf.global_variables_initializer())
+    with tf.Session() as sess:
+        sess.run(tf.global_variables_initializer())
 
-    # 测试在训练之前的模型效果。
-    print("Evaluate model before training.")
-    predictions,labels=run_eval(sess, test_X, test_y)
-    plot_figure(predictions,labels,"before_training")
-    # 训练模型。
-    for i in range(TRAINING_STEPS):
-        _, l = sess.run([train_op, loss])
-        if i % 1000 == 0:
-            print("train step: " + str(i) + ", loss: " + str(l))
+        # 测试在训练之前的模型效果。
+        print("Evaluate model before training.")
+        predictions,labels=run_eval(sess, test_X, test_y)
+        plot_figure(predictions,labels,"before_training")
+        # 训练模型。
+        for i in range(TRAINING_STEPS):
+            _, l = sess.run([train_op, loss])
+            if i % 1000 == 0:
+                print("train step: " + str(i) + ", loss: " + str(l))
 
-    # 使用训练好的模型对测试数据进行预测。
-    print("Evaluate model after training.")
-    predictions,labels=run_eval(sess, test_X, test_y)
-    plot_figure(predictions,labels,"after_training")
+        # 使用训练好的模型对测试数据进行预测。
+        print("Evaluate model after training.")
+        predictions,labels=run_eval(sess, test_X, test_y)
+        plot_figure(predictions,labels,"after_training")
+
+
+if __name__ == '__main__':
+    main()
