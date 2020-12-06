@@ -11,8 +11,8 @@ import matplotlib.pyplot as plt
 tf.reset_default_graph()#清除默认graph堆栈并重置全局默认graph
 # In[]
 # 1. 定义RNN的参数。
-HIDDEN_SIZE = 10                            # LSTM中隐藏节点的个数。
-NUM_LAYERS = 2                              # LSTM的层数。
+HIDDEN_SIZE = 10                            # RNN中隐藏节点的个数。
+NUM_LAYERS = 2                              # RNN的层数。
 TIMESTEPS = 10                              # 循环神经网络的训练序列长度。
 TRAINING_STEPS = 10000                      # 训练轮数。
 BATCH_SIZE = 32                             # batch大小。
