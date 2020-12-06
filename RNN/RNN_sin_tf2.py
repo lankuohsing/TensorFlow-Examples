@@ -75,7 +75,7 @@ history = model.fit(train_ds, epochs=10,
                     validation_steps=1000)
 # In[]
 test_loss = model.evaluate(test_ds)
-print('Test Loss: {}'.format(test_ds))
+print('Test Loss: {}'.format(test_loss))
 # In[]
-predictions = model.predict(test_ds)
+predictions = model.predict(test_X)
 plot_figure(predictions,test_y,"afer_training")
