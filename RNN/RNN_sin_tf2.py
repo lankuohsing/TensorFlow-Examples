@@ -56,6 +56,9 @@ test_X, test_y = generate_data(np.sin(sin_input_test))
 train_ds = tf.data.Dataset.from_tensor_slices((train_X, train_y))#返回的是DataSet对象
 #repeat(count)表示构建count个epoch
 train_ds = train_ds.shuffle(1000).batch(BATCH_SIZE)#取出1000个样本并打乱；每次取出数量为BATCH_SIZE的样本作为一个batch;不重复；
+test_ds = tf.data.Dataset.from_tensor_slices((test_X,test_y))#返回的是DataSet对象
+#repeat(count)表示构建count个epoch
+test_ds = test_ds.shuffle(1000).batch(BATCH_SIZE)#取出1000个样本并打乱；每次取出数量为BATCH_SIZE的样本作为一个batch;不重复；
 # In[]
 model = tf.keras.Sequential([
     tf.keras.layers.SimpleRNN(units=10),
@@ -71,8 +74,8 @@ history = model.fit(train_ds, epochs=10,
                     validation_data=train_ds,
                     validation_steps=1000)
 # In[]
-test_loss = model.evaluate(train_ds)
-print('Test Loss: {}'.format(test_loss))
+test_loss = model.evaluate(test_ds)
+print('Test Loss: {}'.format(test_ds))
 # In[]
-predictions = model.predict(test_X)
+predictions = model.predict(test_ds)
 plot_figure(predictions,test_y,"afer_training")
