@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Mar 14 18:25:14 2021
+Created on Mon Mar 15 22:19:32 2021
 
 @author: lankuohsing
 """
+
+
 
 # In[]
 import numpy as np
@@ -12,9 +14,7 @@ import tensorflow as tf
 # In[]
 def get_model():
     # create a linear regression model
-    inputs=tf.keras.Input(shape=(input_size,),name="InputX")
-    outputs=tf.keras.layers.Dense(output_size,name="Output")(inputs)
-    model=tf.keras.Model(inputs,outputs)
+    model=tf.keras.Sequential([tf.keras.layers.Dense(output_size)])
     model.compile(optimizer="adam", loss="mean_squared_error")
     return model
 
@@ -30,26 +30,30 @@ def keras2pb(keras_model,model_path,pb_name):
     return
 # In[]
 np.random.seed(1)
-input_size=1024
-output_size=8192
+input_size=(4,4096)
+output_size=1024
 input_list=np.random.randint(0,10,input_size).tolist()
 output_list=np.random.randint(0,10,output_size).tolist()
 # In[]
 model=get_model()
-train_X=tf.constant([input_list])
+train_X=tf.constant(input_list)
 train_Y=tf.constant([output_list])
 dataset=tf.data.Dataset.from_tensors((train_X,train_Y))
 
 
 # In[]
-history=model.fit(dataset,epochs=100,validation_data=dataset,validation_steps=10)
+history=model.fit(dataset,epochs=10,validation_data=dataset,validation_steps=10)
 
 pred=model.predict(train_X)
 
 # In[]
-keras2pb(model,"./models/","fc_model.pb")
-model.save("./models/")
+keras2pb(model,"./models/fc3/","fc_model.pb")
+model.save("./models/fc3/")
 # In[]
-converter=tf.lite.TFLiteConverter.from_saved_model("./models")
+model=tf.saved_model.load("./models/fc3")
+concrete_func=model.signatures[tf.saved_model.DEFAULT_SERVING_SIGNATURE_DEF_KEY]
+concrete_func.inputs[0].set_shape([4,4096])
+converter=tf.lite.TFLiteConverter.from_concrete_functions([concrete_func])
 tflite_model=converter.convert()
-open("./models/fc_model.tflite","wb").write(tflite_model)
+with open("./models/fc3_model.tflite","wb")as wf:
+    wf.write(tflite_model)
