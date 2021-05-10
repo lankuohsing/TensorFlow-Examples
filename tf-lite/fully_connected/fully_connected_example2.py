@@ -14,7 +14,7 @@ import tensorflow as tf
 # In[]
 def get_model():
     # create a linear regression model
-    model=tf.keras.Sequential([tf.keras.layers.InputLayer(input_shape=(4096,),name="InputX"),
+    model=tf.keras.Sequential([tf.keras.layers.InputLayer(input_shape=(input_size[1],),name="InputX"),
                                tf.keras.layers.Dense(output_size)])
     model.compile(optimizer="adam", loss="mean_squared_error")
     return model
@@ -53,8 +53,9 @@ model.save("./models/fc2/")
 # In[]
 model=tf.saved_model.load("./models/fc2")
 concrete_func=model.signatures[tf.saved_model.DEFAULT_SERVING_SIGNATURE_DEF_KEY]
-concrete_func.inputs[0].set_shape([4,4096])
+concrete_func.inputs[0].set_shape(input_size)
 converter=tf.lite.TFLiteConverter.from_concrete_functions([concrete_func])
+converter.optimizations=[tf.lite.Optimize.DEFAULT]
 tflite_model=converter.convert()
 with open("./models/fc2_model.tflite","wb")as wf:
     wf.write(tflite_model)

@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Mar 14 18:25:14 2021
+Created on Mon Mar 15 21:44:11 2021
 
 @author: lankuohsing
 """
+
+##recommend
 
 # In[]
 import numpy as np
@@ -12,9 +14,8 @@ import tensorflow as tf
 # In[]
 def get_model():
     # create a linear regression model
-    inputs=tf.keras.Input(shape=(input_size,),name="InputX")
-    outputs=tf.keras.layers.Dense(output_size,name="Output")(inputs)
-    model=tf.keras.Model(inputs,outputs)
+    model=tf.keras.Sequential([tf.keras.layers.InputLayer(input_shape=(input_size[1],),name="InputX"),
+                               tf.keras.layers.Dense(output_size)])
     model.compile(optimizer="adam", loss="mean_squared_error")
     return model
 
@@ -30,13 +31,13 @@ def keras2pb(keras_model,model_path,pb_name):
     return
 # In[]
 np.random.seed(1)
-input_size=1024
-output_size=8192
+input_size=(4,4096)
+output_size=1024
 input_list=np.random.randint(0,10,input_size).tolist()
 output_list=np.random.randint(0,10,output_size).tolist()
 # In[]
 model=get_model()
-train_X=tf.constant([input_list])
+train_X=tf.constant(input_list)
 train_Y=tf.constant([output_list])
 dataset=tf.data.Dataset.from_tensors((train_X,train_Y))
 
@@ -50,6 +51,10 @@ pred=model.predict(train_X)
 keras2pb(model,"./models/fc1/","fc_model.pb")
 model.save("./models/fc1/")
 # In[]
-converter=tf.lite.TFLiteConverter.from_saved_model("./models/fc1")
+model=tf.saved_model.load("./models/fc1")
+concrete_func=model.signatures[tf.saved_model.DEFAULT_SERVING_SIGNATURE_DEF_KEY]
+concrete_func.inputs[0].set_shape(input_size)
+converter=tf.lite.TFLiteConverter.from_concrete_functions([concrete_func])
 tflite_model=converter.convert()
-open("./models/fc1_model.tflite","wb").write(tflite_model)
+with open("./models/fc1_model.tflite","wb")as wf:
+    wf.write(tflite_model)
