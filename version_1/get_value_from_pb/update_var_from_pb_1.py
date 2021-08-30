@@ -27,7 +27,7 @@ def graphCreate() :
         sum = tf.add( sum , var3 , name='sum_var3' )
         sumOps = tf.add( sum , var4 , name='sum_operation' )
         oper = tf.get_default_graph().get_operations()
-        with open( 'operation.csv','wt' ) as f:
+        with open(os.path.join(model_dir, 'operation1.csv'),'wt' ) as f:
             s = 'name,type,output\n'
             f.write( s )
             for o in oper:
@@ -88,7 +88,7 @@ def graphCreateFromPb():
             sum = tf.add ( var1 , var2, name = 'var1_var2' )
             sum = tf.add( sum , var3 , name='sum_var3' )
             sumOps = tf.add( sum , var4 , name='sum_operation' )
-            init=tf.global_variable_initializer()
+            init=tf.global_variables_initializer()
             sess.run(init)
             sess.run(var4op)
             sess.run(pb_copy_ops)
@@ -105,7 +105,7 @@ def graphGet() :
         graph0 = tf.GraphDef()
         with open( os.path.join(model_dir,pbName), mode='rb') as f:
             graph0.ParseFromString( f.read() )
-            tf.import_graph_def( graph0 , name = 'pb1' )
+            tf.import_graph_def( graph0 , name = '' )
 
         with tf.Session() as sess :
             init = tf.global_variables_initializer()
@@ -119,5 +119,6 @@ def graphGet() :
             print( sess.run( sumTensor , feed_dict={v1:1} ) )
 if __name__=="__main__":
     graphCreate()
-    graphGet()
+#    graphGet()
+#    graphCreateFromPb()
 
