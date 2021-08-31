@@ -48,8 +48,9 @@ pred=model.predict(train_X)
 
 # In[]
 keras2pb(model,"./models/fc3/","fc_model.pb")
-model.save("./models/fc3/")
+model.save("./models/fc3/fc3.h5")
 # In[]
+"""
 model=tf.saved_model.load("./models/fc3")
 concrete_func=model.signatures[tf.saved_model.DEFAULT_SERVING_SIGNATURE_DEF_KEY]
 concrete_func.inputs[0].set_shape([4,4096])
@@ -57,3 +58,4 @@ converter=tf.lite.TFLiteConverter.from_concrete_functions([concrete_func])
 tflite_model=converter.convert()
 with open("./models/fc3_model.tflite","wb")as wf:
     wf.write(tflite_model)
+"""

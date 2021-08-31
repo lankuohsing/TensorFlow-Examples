@@ -15,7 +15,7 @@ import tensorflow as tf
 def get_model():
     # create a linear regression model
     model=tf.keras.Sequential([tf.keras.layers.InputLayer(input_shape=(input_size[1],),name="InputX"),
-                               tf.keras.layers.Dense(output_size)])
+                               tf.keras.layers.Dense(output_size,name="Output")])
     model.compile(optimizer="adam", loss="mean_squared_error")
     return model
 
@@ -49,8 +49,11 @@ pred=model.predict(train_X)
 
 # In[]
 keras2pb(model,"./models/fc2/","fc_model.pb")
-model.save("./models/fc2/")
+#model.save("./models/fc2/")
 # In[]
+model.save("./models/fc2/fc2.h5")
+# In[]
+"""
 model=tf.saved_model.load("./models/fc2")
 concrete_func=model.signatures[tf.saved_model.DEFAULT_SERVING_SIGNATURE_DEF_KEY]
 concrete_func.inputs[0].set_shape(input_size)
@@ -59,3 +62,4 @@ converter.optimizations=[tf.lite.Optimize.DEFAULT]
 tflite_model=converter.convert()
 with open("./models/fc2_model.tflite","wb")as wf:
     wf.write(tflite_model)
+"""
