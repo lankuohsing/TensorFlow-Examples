@@ -20,6 +20,7 @@ def get_model():
     return model
 
 def keras2pb(keras_model,model_path,pb_name):
+    """  tf2.3下才能正常使用 """
     from tensorflow.python.keras.saving import saving_utils as _saving_utils
     from tensorflow.python.framework import convert_to_constants as _convert_to_constants
     from tensorflow.compat.v1 import graph_util
@@ -51,7 +52,7 @@ pred=model.predict(train_X)
 keras2pb(model,"./models/fc2/","fc_model.pb")
 #model.save("./models/fc2/")
 # In[]
-model.save("./models/fc2/fc2.h5")
+#model.save("./models/fc2/fc2.h5")
 # In[]
 """
 model=tf.saved_model.load("./models/fc2")
